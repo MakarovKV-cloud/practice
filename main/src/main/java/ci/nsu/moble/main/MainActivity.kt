@@ -1,9 +1,11 @@
 package ci.nsu.moble.main
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.graphics.Color.rgb
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -65,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             if (colorValue != null) {
                 ColorBut.setBackgroundColor(colorValue.toInt())
                 TextColor.setText(selectedColorName)
+                Log.d(TAG, "Цвет найден. Всё хорошо")
             }
         }
 
@@ -74,8 +77,10 @@ class MainActivity : AppCompatActivity() {
 
             if (colorInt != null) {
                 ColorBut.setBackgroundColor(colorInt.toInt())
+                Log.d(TAG, "Цвет найден. Всё хорошо")
             } else {
                 TextColor.error = "Цвет не найден"
+                Log.e(TAG, "Цвет не найден")
             }
         }
     }
