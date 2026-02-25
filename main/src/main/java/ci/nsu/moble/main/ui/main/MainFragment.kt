@@ -9,10 +9,10 @@ import android.view.ViewGroup
 
 import ci.nsu.moble.main.R
 
-class RainbowFragment : Fragment() {
+class MainFragment : Fragment() {
 
     companion object {
-        fun newInstance() = RainbowFragment()
+        fun newInstance() = MainFragment()
     }
 
     private val viewModel: MainViewModel by viewModels()
@@ -28,6 +28,7 @@ class RainbowFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_main, container, false)
+
     }
 
 }
