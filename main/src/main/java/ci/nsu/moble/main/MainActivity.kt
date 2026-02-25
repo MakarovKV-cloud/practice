@@ -1,16 +1,18 @@
 package ci.nsu.moble.main
 
 import android.annotation.SuppressLint
+import android.graphics.Color.rgb
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
-
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
-
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,9 +21,12 @@ class MainActivity : AppCompatActivity() {
 
         val colorMap = mapOf(
             "RED" to 0xFFFF0000,
+            "ORANGE" to rgb(255, 140, 0),
             "YELLOW" to 0xFFFFFF00,
             "GREEN" to 0xFF00FF00,
-            "BLUE" to 0xFF0000FF
+            "LIGHT BLUE" to rgb(0, 183, 255),
+            "BLUE" to 0xFF0000FF,
+            "PURPLE" to rgb(140,9,217)
         )
 
         val TextColor = findViewById<EditText>(R.id.textcolor)
@@ -30,11 +35,27 @@ class MainActivity : AppCompatActivity() {
 
         val colorNames = colorMap.keys.toList()
 
-        val adapter = ArrayAdapter(
+        val adapter = object : ArrayAdapter<String>(
             this,
             android.R.layout.simple_list_item_1,
             colorNames
-        )
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val textView = view as TextView
+                val colorName = colorNames[position]
+                val colorValue = colorMap[colorName]
+
+
+                if (colorValue != null) {
+                    textView.setBackgroundColor(colorValue.toInt())
+
+                }
+
+                return view
+            }
+        }
+
         ColorsList.adapter = adapter
 
         ColorsList.setOnItemClickListener { parent, view, position, id ->
@@ -43,7 +64,6 @@ class MainActivity : AppCompatActivity() {
 
             if (colorValue != null) {
                 ColorBut.setBackgroundColor(colorValue.toInt())
-
                 TextColor.setText(selectedColorName)
             }
         }

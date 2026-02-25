@@ -34,8 +34,8 @@
 
     <ListView
         android:id="@+id/ListColors"
-        android:layout_width="412dp"
-        android:layout_height="287dp"
+        android:layout_width="402dp"
+        android:layout_height="438dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button" />
