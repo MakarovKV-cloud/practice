@@ -17,7 +17,6 @@ data class TemperatureUiState(
 class TemperatureViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(TemperatureUiState())
     val uiState: StateFlow<TemperatureUiState> = _uiState.asStateFlow()
-
     fun onCelsiusChanged(newValue: String) {
         _uiState.update { currentState ->
             val celsius = newValue

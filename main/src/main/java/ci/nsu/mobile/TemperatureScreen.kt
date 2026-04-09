@@ -33,15 +33,15 @@ fun TemperatureScreen(
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 32.dp)
         )
-
+        val isInvalidCelsius = !uiState.isCelsiusValid && uiState.celsius.isNotBlank()
         OutlinedTextField(
             value = uiState.celsius,
             onValueChange = { viewModel.onCelsiusChanged(it) },
             label = { Text("Градусы Цельсия (°C)") },
             placeholder = { Text("Введите температуру в °C") },
-            isError = !uiState.isCelsiusValid && uiState.celsius.isNotBlank(),
+            isError = isInvalidCelsius,
             supportingText = {
-                if (!uiState.isCelsiusValid && uiState.celsius.isNotBlank()) {
+                if (isInvalidCelsius) {
                     Text("Введите корректное число")
                 }
             },
@@ -59,15 +59,15 @@ fun TemperatureScreen(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
+        var isInvalidFarenheit = !uiState.isFahrenheitValid && uiState.fahrenheit.isNotBlank()
         OutlinedTextField(
             value = uiState.fahrenheit,
             onValueChange = { viewModel.onFahrenheitChanged(it) },
             label = { Text("Градусы Фаренгейта (°F)") },
             placeholder = { Text("Введите температуру в °F") },
-            isError = !uiState.isFahrenheitValid && uiState.fahrenheit.isNotBlank(),
+            isError = isInvalidFarenheit,
             supportingText = {
-                if (!uiState.isFahrenheitValid && uiState.fahrenheit.isNotBlank()) {
+                if (isInvalidFarenheit) {
                     Text("Введите корректное число")
                 }
             },
