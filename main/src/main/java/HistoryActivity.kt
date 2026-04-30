@@ -3,11 +3,13 @@ package ci.nsu.mobile.main.ui.history
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ci.nsu.mobile.main.databinding.ActivityHistoryBinding
 import ci.nsu.mobile.main.model.DepositCalculation
 import ci.nsu.mobile.main.ui.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 
 class HistoryActivity : AppCompatActivity() {
 
@@ -41,9 +43,24 @@ class HistoryActivity : AppCompatActivity() {
             goToMainScreen()
         }
 
+        binding.btnClearHistory.setOnClickListener {
+            showClearConfirmationDialog()
+        }
+
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadCalculations()
         }
+    }
+
+    private fun showClearConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Очистить историю")
+            .setMessage("Вы уверены, что хотите удалить все расчёты? Это действие нельзя отменить.")
+            .setPositiveButton("Очистить") { _, _ ->
+                viewModel.clearAllHistory()
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
     }
 
     private fun observeViewModel() {
@@ -66,6 +83,17 @@ class HistoryActivity : AppCompatActivity() {
             message?.let {
                 binding.tvError.text = it
                 binding.tvError.visibility = android.view.View.VISIBLE
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.clearSuccess.observe(this) { success ->
+            if (success) {
+                Snackbar.make(
+                    binding.root,
+                    "История успешно очищена",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }

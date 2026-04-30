@@ -21,6 +21,9 @@ class HistoryViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+    private val _clearSuccess = MutableLiveData<Boolean>()
+    val clearSuccess: LiveData<Boolean> = _clearSuccess
+
     init {
         loadCalculations()
     }
@@ -35,6 +38,20 @@ class HistoryViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Ошибка загрузки истории: ${e.message}"
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun clearAllHistory() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                repository.deleteAllCalculations()
+                _clearSuccess.value = true
+                loadCalculations()
+            } catch (e: Exception) {
+                _errorMessage.value = "Ошибка очистки истории: ${e.message}"
                 _isLoading.value = false
             }
         }

@@ -88,6 +88,7 @@ class ResultActivity : AppCompatActivity() {
     private fun setupUI() {
         binding.btnSave.setOnClickListener {
             saveCalculation()
+            goToMainScreen()
         }
 
         binding.btnBackToStart.setOnClickListener {

@@ -6,14 +6,6 @@ import ci.nsu.mobile.main.repository.DepositRepository
 
 class DepositApplication : Application() {
 
-    companion object {
-        private lateinit var instance: DepositApplication
-
-        fun getInstance(): DepositApplication {
-            return instance
-        }
-    }
-
     lateinit var repository: DepositRepository
         private set
 
@@ -23,5 +15,13 @@ class DepositApplication : Application() {
 
         val database = AppDatabase.getDatabase(this)
         repository = DepositRepository.getInstance(database)
+    }
+
+    companion object {
+        private lateinit var instance: DepositApplication
+
+        fun getInstance(): DepositApplication {
+            return instance
+        }
     }
 }

@@ -23,6 +23,10 @@ class DepositRepository private constructor(private val depositDao: DepositDao) 
         depositDao.deleteCalculation(calculation)
     }
 
+    suspend fun deleteAllCalculations() {
+        depositDao.deleteAllCalculations()
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: DepositRepository? = null
