@@ -1,18 +1,20 @@
-package ci.nsu.mobile.main.database
+package ci.nsu.main.notifier.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ci.nsu.mobile.main.model.DepositCalculation
+import androidx.room.TypeConverters
+import ci.nsu.main.notifier.data.model.NotificationItem
 
 @Database(
-    entities = [DepositCalculation::class],
+    entities = [NotificationItem::class],
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun depositDao(): DepositDao
+    abstract fun notificationDao(): NotificationDao
 
     companion object {
         @Volatile
@@ -23,7 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "deposits_db"
+                    "notifications_db"
                 ).build()
                 INSTANCE = instance
                 instance
