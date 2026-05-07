@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.notifier"
+    namespace = "ci.nsu.main.notifier"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.notifier"
+        applicationId = "ci.nsu.main.notifier"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -38,7 +38,7 @@ android {
     }
 
     buildFeatures {
-        compose = true  // ← ЭТО ВКЛЮЧАЕТ COMPOSE!
+        compose = true
     }
 
     composeOptions {
@@ -78,4 +78,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

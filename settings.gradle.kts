@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "practice"
-include(":main")  // ваш модуль называется "main"
+rootProject.name = "NotifierApp"
+include(":app")
