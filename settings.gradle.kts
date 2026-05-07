@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "NotifierApp"
-include(":app")
+include(":main")
