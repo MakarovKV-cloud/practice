@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ci.nsu.mobile.main.data.model.NotificationItem
 import ci.nsu.mobile.main.viewmodel.NotificationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,6 +26,10 @@ fun MainScreen(
 ) {
     val notifications by viewModel.notifications.collectAsState()
 
+    // Состояние для диалога удаления
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var notificationToDelete by remember { mutableStateOf<NotificationItem?>(null) }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onAddClick) {
@@ -34,7 +40,7 @@ fun MainScreen(
             TopAppBar(
                 title = { Text("Планировщик уведомлений") },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFC7BDBD),
+                    containerColor = Color(0xFF6200EE),
                     titleContentColor = Color.White
                 )
             )
@@ -75,9 +81,12 @@ fun MainScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(8.dp)
-                                    .clickable { onEditClick(notification.id) },  // ← открытие по нажатию на карточку
+                                    .clickable { onEditClick(notification.id) },
                                 colors = CardDefaults.cardColors(
-                                    containerColor = if (notification.isEnabled) Color.White else Color.LightGray
+                                    containerColor = Color(0xFFC7BDBD)
+                                ),
+                                elevation = CardDefaults.cardElevation(
+                                    defaultElevation = 4.dp
                                 )
                             ) {
                                 Row(
@@ -94,7 +103,7 @@ fun MainScreen(
                                         Text(
                                             text = notification.description,
                                             fontSize = 12.sp,
-                                            color = if (notification.isEnabled) Color.Gray else Color.DarkGray.copy(alpha = 0.6f)
+                                            color = if (notification.isEnabled) Color.DarkGray else Color.DarkGray.copy(alpha = 0.6f)
                                         )
                                     }
 
@@ -102,6 +111,20 @@ fun MainScreen(
                                         checked = notification.isEnabled,
                                         onCheckedChange = { viewModel.toggleEnabled(notification) }
                                     )
+
+                                    // Красная кнопка с крестом
+                                    IconButton(
+                                        onClick = {
+                                            notificationToDelete = notification
+                                            showDeleteDialog = true
+                                        }
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Close,
+                                            contentDescription = "Удалить",
+                                            tint = Color.Red
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -109,5 +132,40 @@ fun MainScreen(
                 }
             }
         }
+    }
+
+    // Диалог подтверждения удаления
+    if (showDeleteDialog && notificationToDelete != null) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+                notificationToDelete = null
+            },
+            title = { Text("Подтверждение удаления") },
+            text = { Text("Вы действительно хотите удалить напоминание \"${notificationToDelete!!.title}\"?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        notificationToDelete?.let {
+                            viewModel.deleteNotification(it)
+                        }
+                        showDeleteDialog = false
+                        notificationToDelete = null
+                    }
+                ) {
+                    Text("Удалить", color = Color.Red)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        notificationToDelete = null
+                    }
+                ) {
+                    Text("Отмена")
+                }
+            }
+        )
     }
 }
