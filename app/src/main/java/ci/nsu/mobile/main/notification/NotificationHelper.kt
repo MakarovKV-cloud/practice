@@ -15,7 +15,7 @@ object NotificationHelper {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_DEFAULT  // Меняем HIGH на DEFAULT, чтобы убрать полноэкранный режим
             ).apply {
                 description = "Канал для запланированных уведомлений"
                 enableVibration(true)
@@ -33,7 +33,7 @@ object NotificationHelper {
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(content)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)  // Убираем HIGH
             .setAutoCancel(true)
             .build()
 
