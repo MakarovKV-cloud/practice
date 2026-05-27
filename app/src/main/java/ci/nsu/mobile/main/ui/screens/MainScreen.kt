@@ -1,12 +1,14 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package ci.nsu.mobile.main.ui.screens
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,7 +28,6 @@ fun MainScreen(
 ) {
     val notifications by viewModel.notifications.collectAsState()
 
-    // Состояние для диалога удаления
     var showDeleteDialog by remember { mutableStateOf(false) }
     var notificationToDelete by remember { mutableStateOf<NotificationItem?>(null) }
 
@@ -81,7 +82,13 @@ fun MainScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(8.dp)
-                                    .clickable { onEditClick(notification.id) },
+                                    .combinedClickable(
+                                        onClick = { onEditClick(notification.id) },
+                                        onLongClick = {
+                                            notificationToDelete = notification
+                                            showDeleteDialog = true
+                                        }
+                                    ),
                                 colors = CardDefaults.cardColors(
                                     containerColor = Color(0xFFC7BDBD)
                                 ),
@@ -111,20 +118,6 @@ fun MainScreen(
                                         checked = notification.isEnabled,
                                         onCheckedChange = { viewModel.toggleEnabled(notification) }
                                     )
-
-                                    // Красная кнопка с крестом
-                                    IconButton(
-                                        onClick = {
-                                            notificationToDelete = notification
-                                            showDeleteDialog = true
-                                        }
-                                    ) {
-                                        Icon(
-                                            Icons.Default.Close,
-                                            contentDescription = "Удалить",
-                                            tint = Color.Red
-                                        )
-                                    }
                                 }
                             }
                         }
@@ -134,7 +127,6 @@ fun MainScreen(
         }
     }
 
-    // Диалог подтверждения удаления
     if (showDeleteDialog && notificationToDelete != null) {
         AlertDialog(
             onDismissRequest = {
