@@ -12,9 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ci.nsu.mobile.main.data.model.NotificationItem
 import ci.nsu.mobile.main.viewmodel.NotificationViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,17 +75,32 @@ fun MainScreen(
                                     .fillMaxWidth()
                                     .padding(8.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = Color.White
+                                    containerColor = if (notification.isEnabled) Color.White else Color.LightGray
                                 )
                             ) {
                                 Row(
                                     modifier = Modifier.padding(16.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Column {
-                                        Text(notification.title, fontSize = 16.sp, color = Color.Black)
-                                        Text(notification.description, fontSize = 12.sp, color = Color.Gray)
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = notification.title,
+                                            fontSize = 16.sp,
+                                            color = if (notification.isEnabled) Color.Black else Color.DarkGray
+                                        )
+                                        Text(
+                                            text = notification.description,
+                                            fontSize = 12.sp,
+                                            color = if (notification.isEnabled) Color.Gray else Color.DarkGray.copy(alpha = 0.6f)
+                                        )
                                     }
+
+                                    Checkbox(
+                                        checked = notification.isEnabled,
+                                        onCheckedChange = { viewModel.toggleEnabled(notification) }
+                                    )
+
                                     Button(onClick = { onEditClick(notification.id) }) {
                                         Text("Редактировать")
                                     }
