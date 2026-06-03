@@ -12,16 +12,21 @@ object NotificationHelper {
 
     fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+
+            notificationManager.deleteNotificationChannel(CHANNEL_ID)
+
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT  // Меняем HIGH на DEFAULT, чтобы убрать полноэкранный режим
+                NotificationManager.IMPORTANCE_LOW
             ).apply {
                 description = "Канал для запланированных уведомлений"
-                enableVibration(true)
-                enableLights(true)
+                enableVibration(false)
+                enableLights(false)
+                setSound(null, null)
+                setShowBadge(false)
             }
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -33,7 +38,7 @@ object NotificationHelper {
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle(title)
             .setContentText(content)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)  // Убираем HIGH
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setAutoCancel(true)
             .build()
 

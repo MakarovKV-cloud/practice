@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ci.nsu.mobile.main.data.model.NotificationItem
+import ci.nsu.mobile.main.utils.DateUtils
 import ci.nsu.mobile.main.viewmodel.NotificationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,6 +114,14 @@ fun MainScreen(
                                             color = if (notification.isEnabled) Color.DarkGray else Color.DarkGray.copy(alpha = 0.6f)
                                         )
                                     }
+
+                                    // Отображение времени уведомления
+                                    Text(
+                                        text = DateUtils.formatDateTime(notification.timestamp),
+                                        fontSize = 12.sp,
+                                        color = if (notification.isEnabled) MaterialTheme.colorScheme.primary else Color.DarkGray,
+                                        modifier = Modifier.padding(end = 8.dp)
+                                    )
 
                                     Checkbox(
                                         checked = notification.isEnabled,
